@@ -4,6 +4,9 @@
 
 基于 PyTorch 的深度学习练习集合，涵盖从经典全连接网络到 Transformer 的多种模型实现。
 
+## 依赖
+python=3.11
+
 ## 项目结构
 
 ```
@@ -21,8 +24,8 @@ deep-learning-study/
 | 模块 | 任务 | 模型 | 数据集 |
 |------|------|------|--------|
 | `1_dnn_iris` | 鸢尾花分类 | MLP | Iris |
-| `2_dnn_mnist` | 手写数字识别 | MLP | MNIST |
-| `3_dnn_cifar10` | 图像分类 | MLP | CIFAR-10 |
+| `2_dnn_mnist` | 手写数字识别 | MLP and CNN | MNIST |
+| `3_dnn_cifar10` | 图像分类 | MLP and CNN | CIFAR-10 |
 | `4_transformer_imdb` | 情感分析 | Transformer Encoder | IMDB |
 
 ## 统一训练框架

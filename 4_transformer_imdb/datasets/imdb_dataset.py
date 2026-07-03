@@ -63,39 +63,44 @@ class IMDBDataset(Dataset):
 # ===========================
 # 加载数据
 # ===========================
-def load_imdb_data(data_dir="./data/aclImdb"):
+def load_imdb_data(data_dir="./data/aclImdb", num_samples=None):
     import os
 
-    def read_folder(folder, label):
+    def read_folder(folder, label, limit=None):
         texts = []
         labels = []
-        for fname in os.listdir(folder):
-            if fname.endswith(".txt"):
-                with open(os.path.join(folder, fname), encoding="utf-8") as f:
-                    texts.append(f.read())
-                    labels.append(label)
+        files = [f for f in os.listdir(folder) if f.endswith(".txt")]
+        if limit:
+            files = files[:limit]
+        for fname in files:
+            with open(os.path.join(folder, fname), encoding="utf-8") as f:
+                texts.append(f.read())
+                labels.append(label)
         return texts, labels
+
+    # num_samples 控制每类读取数量，None 表示全量
+    per_class = num_samples // 2 if num_samples else None
 
     train_pos = os.path.join(data_dir, "train", "pos")
     train_neg = os.path.join(data_dir, "train", "neg")
     test_pos = os.path.join(data_dir, "test", "pos")
     test_neg = os.path.join(data_dir, "test", "neg")
 
-    train_texts, train_labels = read_folder(train_pos, 1)
-    neg_texts, neg_labels = read_folder(train_neg, 0)
+    train_texts, train_labels = read_folder(train_pos, 1, per_class)
+    neg_texts, neg_labels = read_folder(train_neg, 0, per_class)
     train_texts += neg_texts
     train_labels += neg_labels
 
-    test_texts, test_labels = read_folder(test_pos, 1)
-    neg_texts, neg_labels = read_folder(test_neg, 0)
+    test_texts, test_labels = read_folder(test_pos, 1, per_class)
+    neg_texts, neg_labels = read_folder(test_neg, 0, per_class)
     test_texts += neg_texts
     test_labels += neg_labels
 
     return train_texts, train_labels, test_texts, test_labels
 
 
-def get_loaders(data_dir="./data/aclImdb", batch_size=64, max_len=256, vocab_size=25000):
-    train_texts, train_labels, test_texts, test_labels = load_imdb_data(data_dir)
+def get_loaders(data_dir="./data/aclImdb", batch_size=64, max_len=256, vocab_size=25000, num_samples=None):
+    train_texts, train_labels, test_texts, test_labels = load_imdb_data(data_dir, num_samples=num_samples)
 
     vocab = Vocab(max_size=vocab_size)
     vocab.build(train_texts)
@@ -113,7 +118,7 @@ def get_loaders(data_dir="./data/aclImdb", batch_size=64, max_len=256, vocab_siz
 # 测试
 # ===========================
 if __name__ == "__main__":
-    train_loader, test_loader, vocab = get_loaders()
+    train_loader, test_loader, vocab = get_loaders(num_samples=10)
     for x, y in train_loader:
         print(x.shape, y.shape)
         break
