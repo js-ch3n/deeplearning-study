@@ -1,5 +1,7 @@
 # 深度学习练习项目
 
+> 📖 [English Version](README.md)
+
 基于 PyTorch 的深度学习练习集合，涵盖从经典全连接网络到 Transformer 的多种模型实现。
 
 ## 项目结构
@@ -56,6 +58,3 @@ cd 3_dnn_cifar10 && python train.py
 cd 4_transformer_imdb && python train.py
 ```
 
-## License
-
-MIT

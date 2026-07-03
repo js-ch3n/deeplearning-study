@@ -1,5 +1,7 @@
 # Deep Learning Study
 
+> 📖 [中文文档](README_zh.md)
+
 A collection of PyTorch-based deep learning exercises, covering models from classic fully-connected networks to Transformers.
 
 ## Project Structure
@@ -56,6 +58,3 @@ cd 3_dnn_cifar10 && python train.py
 cd 4_transformer_imdb && python train.py
 ```
 
-## License
-
-MIT
