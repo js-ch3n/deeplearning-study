@@ -157,7 +157,8 @@ def save_checkpoint(checkpoint_dict, path):
 # ===========================
 def train_one_epoch(model, train_loader, test_loader,
                     criterion, optimizer, scheduler, device,
-                    epoch=None, total_epochs=None):
+                    epoch=None, total_epochs=None,
+                    plateau_scheduler=False):
     model.train()
 
     total_loss = 0.0
@@ -187,8 +188,7 @@ def train_one_epoch(model, train_loader, test_loader,
 
     test_loss, test_acc = test(model, test_loader, device)
 
-    # 学习率调度（支持需要 metric 的调度器, 如 ReduceLROnPlateau）
-    if use_plateau_scheduler:
+    if plateau_scheduler:
         scheduler.step(test_loss)
     else:
         scheduler.step()
@@ -356,6 +356,7 @@ def train():
             model, train_loader, test_loader,
             criterion, optimizer, scheduler, device,
             epoch=epoch, total_epochs=epochs,
+            plateau_scheduler=use_plateau_scheduler,
         )
 
         train_loss_list.append(train_loss)
