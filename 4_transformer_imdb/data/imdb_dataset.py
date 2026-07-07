@@ -25,10 +25,15 @@ class Vocab:
             self.idx2word[idx] = word
 
     def encode(self, text, max_len=256):
+        # 编码时，默认最大长度为256
+        # 分词（小写、去标点符号）
         tokens = self.tokenize(text)
+
         indices = [self.word2idx.get(t, 1) for t in tokens]
+        # 不够最大，补PAD
         if len(indices) < max_len:
             indices += [0] * (max_len - len(indices))
+        # 超最大token数，截断
         else:
             indices = indices[:max_len]
         return indices
@@ -38,6 +43,7 @@ class Vocab:
 
     @staticmethod
     def tokenize(text):
+        # 去小写
         text = re.sub(r"[^a-zA-Z0-9\s]", "", text.lower())
         return text.split()
 

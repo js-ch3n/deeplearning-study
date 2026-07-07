@@ -11,8 +11,9 @@ deep-learning-study/
 ├── 1_dnn_iris/          # Iris classification with DNN
 ├── 2_dnn_mnist/         # Handwritten digit recognition (MNIST) with DNN
 ├── 3_dnn_cifar10/       # Image classification (CIFAR-10) with DNN
-├── 4_transformer_imdb/  # Sentiment analysis (IMDB) with Transformer
-├── requirements.txt     # Python dependencies
+├── 4_transformer_imdb/   # Sentiment analysis (IMDB) with Transformer
+├── 5_transformer_wmt14/  # Machine translation (WMT14) with Transformer
+├── requirements.txt      # Python dependencies
 └── README.md
 ```
 
@@ -24,6 +25,7 @@ deep-learning-study/
 | `2_dnn_mnist` | Digit recognition | MLP | MNIST |
 | `3_dnn_cifar10` | Image classification | MLP | CIFAR-10 |
 | `4_transformer_imdb` | Sentiment analysis | Transformer Encoder | IMDB |
+| `5_transformer_wmt14` | Machine translation | Transformer (enc-dec) | WMT14 |
 
 ## Unified Training Framework
 

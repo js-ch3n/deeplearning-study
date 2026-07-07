@@ -1,4 +1,15 @@
-data/
+# 各模块 data/ 目录：忽略全部内容，但保留 dataset 源码（目录名 data/ 避开了 HF datasets 包命名冲突）
+data/**
+1_dnn_iris/data/**
+2_dnn_mnist/data/**
+3_dnn_cifar10/data/**
+4_transformer_imdb/data/**
+5_transformer_wmt14/data/**
+!1_dnn_iris/data/*.py
+!2_dnn_mnist/data/*.py
+!3_dnn_cifar10/data/*.py
+!4_transformer_imdb/data/*.py
+!5_transformer_wmt14/data/*.py
 .claude/
 .serena/
 

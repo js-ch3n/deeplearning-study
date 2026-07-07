@@ -14,8 +14,9 @@ deep-learning-study/
 ├── 1_dnn_iris/          # DNN 实现鸢尾花分类
 ├── 2_dnn_mnist/         # DNN 实现手写数字识别 (MNIST)
 ├── 3_dnn_cifar10/       # DNN 实现 CIFAR-10 图像分类
-├── 4_transformer_imdb/  # Transformer 实现 IMDB 情感分析
-├── requirements.txt     # Python 依赖
+├── 4_transformer_imdb/   # Transformer 实现 IMDB 情感分析
+├── 5_transformer_wmt14/  # Transformer 实现 WMT14 机器翻译
+├── requirements.txt      # Python 依赖
 └── README.md            # 英文版说明
 ```
 
@@ -27,6 +28,7 @@ deep-learning-study/
 | `2_dnn_mnist` | 手写数字识别 | MLP and CNN | MNIST |
 | `3_dnn_cifar10` | 图像分类 | MLP and CNN | CIFAR-10 |
 | `4_transformer_imdb` | 情感分析 | Transformer Encoder | IMDB |
+| `5_transformer_wmt14` | 机器翻译 | Transformer (enc-dec) | WMT14 |
 
 ## 统一训练框架
 
