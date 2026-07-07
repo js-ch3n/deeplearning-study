@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 from collections import Counter
+from tqdm.auto import tqdm
 import re
 
 
@@ -15,7 +16,7 @@ class Vocab:
 
     def build(self, texts):
         counter = Counter()
-        for text in texts:
+        for text in tqdm(texts, desc="构建词汇表", unit="doc"):
             tokens = self.tokenize(text)
             counter.update(tokens)
 
@@ -78,7 +79,7 @@ def load_imdb_data(data_dir="./data/aclImdb", num_samples=None):
         files = [f for f in os.listdir(folder) if f.endswith(".txt")]
         if limit:
             files = files[:limit]
-        for fname in files:
+        for fname in tqdm(files, desc=f"读取 {os.path.basename(folder)}", unit="file"):
             with open(os.path.join(folder, fname), encoding="utf-8") as f:
                 texts.append(f.read())
                 labels.append(label)
