@@ -281,6 +281,12 @@ def train():
             lr=learning_rate,
             weight_decay=weight_decay
         )
+    elif optimizer_name == "AdamW":
+        optimizer = torch.optim.AdamW(
+            model.parameters(),
+            lr=learning_rate,
+            weight_decay=weight_decay
+        )
     elif optimizer_name == "SGD":
         momentum = cfg["optimizer"].get("momentum", 0.9)
         optimizer = torch.optim.SGD(
