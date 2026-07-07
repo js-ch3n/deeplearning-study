@@ -1,0 +1,47 @@
+seed: 42
+device: auto
+
+# 数据
+data:
+  lang_pair: de-en
+  batch_size: 64
+  max_len: 128
+  vocab_size: 37000
+  num_samples: null          # 调试时设 5000，null 全量
+
+# 模型
+model:
+  d_model: 512
+  nhead: 8
+  num_encoder_layers: 6
+  num_decoder_layers: 6
+  dim_feedforward: 2048
+  dropout: 0.1
+
+# 训练
+epochs: 20
+learning_rate: 0.0001
+
+optimizer:
+  name: AdamW
+  weight_decay: 0.01
+
+scheduler:
+  name: ReduceLROnPlateau
+  patience: 3
+  factor: 0.5
+
+# Checkpoint
+checkpoint:
+  root_dir: checkpoints
+  save_best: true
+  save_last: true
+  save_every_n_epochs: 5
+  archive_under_runs: true
+
+runs_dir: runs
+log_metrics: true
+save_summary: true
+
+# 推理
+beam_size: 1                 # 1=贪心，>1=beam search
