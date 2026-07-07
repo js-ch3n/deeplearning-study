@@ -87,18 +87,21 @@ class WMT14Dataset(Dataset):
 # ===========================
 # 加载数据
 # ===========================
-def load_wmt14_data(split="train", lang_pair="de-en", num_samples=None, repo_id="wmt/wmt14"):
+def load_wmt14_data(split="train", lang_pair="de-en", num_samples=None, repo_id="wmt/wmt14",
+                    cache_dir="../data/hf_cache"):
     """
     通过 HuggingFace datasets 加载 WMT14。
     split: "train" / "validation" / "test"
     lang_pair: "de-en" (英<->德) 或 "fr-en" (英<->法)
     num_samples: 只取前 N 条，用于调试；None 表示全量
+    cache_dir: 本地缓存目录，已下载过则直接读取不重下
     """
     t0 = time.perf_counter()
-    log.info(f"[{split}] 开始加载 WMT14 {lang_pair} ...")
-    log.info(f"  (首次会自动从 HuggingFace Hub 下载，请耐心等待；缓存目录 ~/.cache/huggingface/datasets/)")
+    log.info(f"[{split}] 开始加载 WMT14 {lang_pair} (cache: {cache_dir}) ...")
 
-    dataset = load_dataset(repo_id, lang_pair, split=split)  # 内置进度条显示下载/处理
+    with tqdm(total=None, desc=f"[{split}] 加载数据集", unit="样本") as pbar:
+        dataset = load_dataset(repo_id, lang_pair, split=split, cache_dir=cache_dir)
+        pbar.update(len(dataset))  # 加载完成后更新总量
 
     elapsed = time.perf_counter() - t0
     log.info(f"[{split}] 加载完成，共 {len(dataset):,} 条，耗时 {timedelta(seconds=int(elapsed))}")
@@ -117,6 +120,7 @@ def get_loaders(
     max_len=64,
     vocab_size=37000,
     num_samples=None,
+    num_workers=16,
 ):
     """
     返回 train_loader, val_loader, src_vocab, tgt_vocab
@@ -145,8 +149,8 @@ def get_loaders(
     train_dataset = WMT14Dataset(train_data, src_vocab, tgt_vocab, max_len)
     val_dataset = WMT14Dataset(val_data, src_vocab, tgt_vocab, max_len)
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
     total_elapsed = time.perf_counter() - total_t0
     log.info("=" * 50)
