@@ -1,4 +1,4 @@
-batch_size: 64
+batch_size: 256
 checkpoint:
   archive_under_runs: true
   root_dir: checkpoints
@@ -8,25 +8,28 @@ checkpoint:
 data:
   folder: ./data/aclImdb
 device: auto
-epochs: 10
+epochs: 50
 learning_rate: 0.0001
 log_metrics: true
 model:
-  d_model: 128
+  d_model: 256
   dim_feedforward: 512
-  dropout: 0.1
+  dropout: 0.3
   max_len: 256
   nhead: 8
   num_classes: 2
   num_layers: 3
   vocab_size: 25000
 optimizer:
-  name: Adam
-  weight_decay: 0.0
+  name: AdamW
+  weight_decay: 0.01
 runs_dir: runs
 save_summary: true
 scheduler:
-  gamma: 0.8
-  name: StepLR
-  step_size: 3
+  # gamma: 0.5
+  # name: StepLR
+  # step_size: 10
+  name: ReduceLROnPlateau # 改为根据指标动态衰减
+  patience: 3
+  factor: 0.5
 seed: 42

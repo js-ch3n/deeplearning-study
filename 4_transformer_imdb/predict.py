@@ -25,8 +25,18 @@ def load_vocab(data_dir="./data/aclImdb", vocab_size=25000):
     return vocab
 
 
-def load_model(checkpoint_path, vocab_size, device):
-    model = TransformerClassifier(vocab_size=vocab_size).to(device)
+def load_model(checkpoint_path, vocab_size, device, model_cfg=None):
+    cfg = model_cfg or {}
+    model = TransformerClassifier(
+        vocab_size=vocab_size,
+        d_model=cfg.get("d_model", 256),
+        nhead=cfg.get("nhead", 8),
+        num_layers=cfg.get("num_layers", 3),
+        dim_feedforward=cfg.get("dim_feedforward", 512),
+        max_len=cfg.get("max_len", 256),
+        dropout=cfg.get("dropout", 0.1),
+        num_classes=cfg.get("num_classes", 2),
+    ).to(device)
 
     checkpoint = torch.load(checkpoint_path, map_location=device)
     if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
@@ -76,7 +86,7 @@ def main():
     vocab_size = model_cfg.get("vocab_size", 25000)
 
     vocab = load_vocab(data_folder, vocab_size=vocab_size)
-    model = load_model(args.checkpoint, vocab_size=len(vocab), device=device)
+    model = load_model(args.checkpoint, vocab_size=len(vocab), device=device, model_cfg=model_cfg)
     print(f"Vocab size: {len(vocab)}, Model loaded: {args.checkpoint}\n")
 
     if args.evaluate:
