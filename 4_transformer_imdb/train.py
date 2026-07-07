@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 
 from data.imdb_dataset import get_loaders
 from models.transformer_model import TransformerClassifier
+from tqdm.auto import tqdm
 
 import matplotlib.pyplot as plt
 
@@ -160,7 +161,13 @@ def train_one_epoch(model, train_loader, test_loader,
 
     total_loss = 0.0
 
-    for x, y in train_loader:
+    epoch_pbar = tqdm(
+        train_loader,
+        desc=f"Epoch {epoch + 1}/{epochs}",
+        unit="batch",
+        leave=True,
+    )
+    for x, y in epoch_pbar:
         x = x.to(device)
         y = y.to(device)
 
@@ -172,11 +179,17 @@ def train_one_epoch(model, train_loader, test_loader,
         optimizer.step()
 
         total_loss += loss.item()
+        epoch_pbar.set_postfix(loss=f"{loss.item():.4f}")
 
     train_loss = total_loss / len(train_loader)
-    scheduler.step()
 
     test_loss, test_acc = test(model, test_loader, device)
+
+    # 学习率调度（支持需要 metric 的调度器, 如 ReduceLROnPlateau）
+    if use_plateau_scheduler:
+        scheduler.step(test_loss)
+    else:
+        scheduler.step()
 
     return train_loss, test_loss, test_acc
 
@@ -311,8 +324,19 @@ def train():
             optimizer,
             T_max=t_max
         )
+    elif scheduler_name == "ReduceLROnPlateau":
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode="min",
+            factor=cfg["scheduler"].get("factor", 0.5),
+            patience=cfg["scheduler"].get("patience", 3),
+        )
     else:
         raise ValueError(f"Unsupported scheduler: {scheduler_name}")
+
+    use_plateau_scheduler = isinstance(
+        scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau
+    )
 
     # ----- 训练循环 -----
     train_loss_list = []
