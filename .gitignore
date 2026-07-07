@@ -1,3 +1,25 @@
 data/
 .claude/
 .serena/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editor
+.vscode/
+.idea/
+
+# Model checkpoints
+*.pth
+*.pt
+
+# Training runs & logs
+runs/
+wandb/
+
+# Scratch / test files
+test.py
+
+# OS
+.DS_Store

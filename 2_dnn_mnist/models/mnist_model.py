@@ -8,7 +8,7 @@ class MnistNetwork(nn.Module):
 
         self.features = nn.Sequential(
             # (B,1,28,28)
-            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.Conv2d(1, 32, kernel_size=3, padding=1), # (B,32,28,28)
             nn.ReLU(),
             nn.MaxPool2d(2),              # (B,32,14,14)
 

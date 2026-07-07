@@ -21,8 +21,8 @@ if torch.cuda.is_available():
 # ===========================
 # 超参数
 # ===========================
-BATCH_SIZE = 16
-EPOCHS = 10
+BATCH_SIZE = 256
+EPOCHS = 60
 LEARNING_RATE = 0.001
 MODEL_PATH = "./checkpoints/mnist.pth"
 

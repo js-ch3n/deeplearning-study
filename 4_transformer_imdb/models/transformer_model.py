@@ -25,29 +25,29 @@ class PositionalEncoding(nn.Module):
 
 
 # ===========================
-# Transformer编码器层
+# Transformer编码器层（pre-norm，继承 nn.TransformerEncoderLayer）
 # ===========================
-class TransformerEncoderLayer(nn.Module):
+class TransformerEncoderLayer(nn.TransformerEncoderLayer):
     def __init__(self, d_model, nhead, dim_feedforward=512, dropout=0.1):
-        super().__init__()
-        self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=True)
-        self.linear1 = nn.Linear(d_model, dim_feedforward)
-        self.dropout = nn.Dropout(dropout)
-        self.linear2 = nn.Linear(dim_feedforward, d_model)
+        super().__init__(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            activation="relu",
+            batch_first=True,
+            norm_first=False,
+            bias=True,
+        )
 
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
-        self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)
-
-    def forward(self, src):
-        # 自注意力 + 残差 + LayerNorm
-        src2 = self.self_attn(src, src, src)[0]
+    def forward(self, src, src_mask=None, src_key_padding_mask=None, is_causal=None):
+        # pre-norm + 残差（覆盖默认 post-norm）
+        src2 = self.self_attn(src, src, src,
+                              key_padding_mask=src_key_padding_mask)[0]
         src = src + self.dropout1(src2)
         src = self.norm1(src)
 
-        # 前馈网络 + 残差 + LayerNorm
-        src2 = self.linear2(self.dropout(torch.relu(self.linear1(src))))
+        src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
         src = src + self.dropout2(src2)
         src = self.norm2(src)
 
