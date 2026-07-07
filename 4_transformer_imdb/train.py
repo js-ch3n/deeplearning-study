@@ -156,14 +156,16 @@ def save_checkpoint(checkpoint_dict, path):
 # 训练单轮
 # ===========================
 def train_one_epoch(model, train_loader, test_loader,
-                    criterion, optimizer, scheduler, device):
+                    criterion, optimizer, scheduler, device,
+                    epoch=None, total_epochs=None):
     model.train()
 
     total_loss = 0.0
 
+    desc = f"Epoch {epoch + 1}/{total_epochs}" if epoch is not None and total_epochs is not None else "Train"
     epoch_pbar = tqdm(
         train_loader,
-        desc=f"Epoch {epoch + 1}/{epochs}",
+        desc=desc,
         unit="batch",
         leave=True,
     )
@@ -352,7 +354,8 @@ def train():
     for epoch in range(epochs):
         train_loss, test_loss, test_acc = train_one_epoch(
             model, train_loader, test_loader,
-            criterion, optimizer, scheduler, device
+            criterion, optimizer, scheduler, device,
+            epoch=epoch, total_epochs=epochs,
         )
 
         train_loss_list.append(train_loss)
