@@ -47,7 +47,7 @@ def load_data(data_folder, batch_size=64, max_len=256, vocab_size=25000, num_sam
 # ===========================
 # 绘图
 # ===========================
-def plot_losses(train_loss_list, test_loss_list):
+def plot_losses(train_loss_list, test_loss_list, save_path=None):
     plt.figure(figsize=(8, 5))
 
     plt.plot(train_loss_list, label="Train Loss")
@@ -58,6 +58,10 @@ def plot_losses(train_loss_list, test_loss_list):
     plt.title("IMDB Training Curve")
     plt.legend()
     plt.grid(True)
+
+    if save_path is not None:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, dpi=120, bbox_inches="tight")
 
     plt.show()
 
@@ -229,7 +233,9 @@ def train():
     run_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = os.path.join(runs_dir, f"run_{run_timestamp}")
     run_ckpt_dir = os.path.join(run_dir, "checkpoints")
+    run_plots_dir = os.path.join(run_dir, "plots")
     os.makedirs(run_ckpt_dir, exist_ok=True)
+    os.makedirs(run_plots_dir, exist_ok=True)
     os.makedirs(root_dir, exist_ok=True)
 
     # 保存运行时配置快照
@@ -397,7 +403,11 @@ def train():
             json.dump(summary, f, indent=2, ensure_ascii=False)
 
     # ----- 绘图 -----
-    plot_losses(train_loss_list, test_loss_list)
+    plot_losses(
+        train_loss_list,
+        test_loss_list,
+        save_path=os.path.join(run_plots_dir, "losses.png"),
+    )
 
 
 if __name__ == "__main__":
