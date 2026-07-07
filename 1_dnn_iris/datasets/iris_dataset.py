@@ -1,14 +1,12 @@
 from torch.utils.data import Dataset
-import torch
 
 
 class IrisDataset(Dataset):
-    def __init__(self, feature, label, transform=None):
+    def __init__(self, features, labels, transform=None):
         super().__init__()
-        self.features = feature 
-        self.labels = label
+        self.features = features
+        self.labels = labels
         self.transform = transform
-
 
     def __len__(self):
         return len(self.features)

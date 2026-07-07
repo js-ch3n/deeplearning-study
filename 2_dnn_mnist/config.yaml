@@ -1,0 +1,25 @@
+batch_size: 256
+checkpoint:
+  archive_under_runs: true
+  root_dir: checkpoints
+  save_best: true
+  save_every_n_epochs: 10
+  save_last: true
+data:
+  folder: ./data
+  download: false
+  mirrors: []
+device: auto
+epochs: 60
+learning_rate: 0.001
+log_metrics: true
+optimizer:
+  name: Adam
+  weight_decay: 0.0
+runs_dir: runs
+save_summary: true
+scheduler:
+  gamma: 0.8
+  name: StepLR
+  step_size: 20
+seed: 42

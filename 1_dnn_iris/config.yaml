@@ -1,0 +1,24 @@
+batch_size: 16
+checkpoint:
+  archive_under_runs: true
+  root_dir: checkpoints
+  save_best: true
+  save_every_n_epochs: 200
+  save_last: true
+data:
+  csv_path: data/iris.csv
+  train_ratio: 0.8
+device: auto
+epochs: 2000
+learning_rate: 0.001
+log_metrics: true
+optimizer:
+  name: Adam
+  weight_decay: 0.0
+runs_dir: runs
+save_summary: true
+scheduler:
+  gamma: 0.8
+  name: StepLR
+  step_size: 700
+seed: 42
